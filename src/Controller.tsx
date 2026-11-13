@@ -42,7 +42,7 @@ function JoinForm({ room, join, error }: { room: string; join: (n: string) => Pr
 }
 
 const Shell = ({ v, online, children, wide }: { v: View; online: boolean; children: React.ReactNode; wide?: boolean }) => (
-  <div className={`body sm:rounded-[28px] rounded-none min-h-dvh sm:min-h-0 mx-auto p-4 sm:p-6 flex flex-col gap-4 ${wide ? 'max-w-4xl' : 'max-w-md'}`}>
+  <div className={`body sm:rounded-[28px] rounded-none min-h-dvh sm:min-h-0 mx-auto p-4 sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))] flex flex-col gap-4 ${wide ? 'max-w-4xl' : 'max-w-md'}`}>
     <div className="flex items-center gap-3">
       <TopStrip v={v} online={online} compact />
     </div>
@@ -167,10 +167,15 @@ function Controller({ v, online }: { v: View; online: boolean }) {
       {msg && <p role="alert" className="mono text-[12px] text-[#B23A16]">{msg}</p>}
 
       <section className="flex flex-col gap-3 pt-2" aria-label="Note sheets">
-        <div className="flex items-center gap-2"><ChBadge t={t} /><span className="label">YOUR KEYWORDS · PRIVATE</span></div>
-        <NoteKeys v={v} t={t} words={v.secret?.keywords} />
-        <div className="flex items-center gap-2 pt-2"><ChBadge t={o} /><span className="label">CHANNEL {CH[o]} · INTERCEPTED CLUES</span></div>
-        <NoteKeys v={v} t={o} words={v.reveal?.[o]} />
+        {/* the keypad above already is this sheet while decoding / intercepting */}
+        {me.role !== 'decoder' && <>
+          <div className="flex items-center gap-2"><ChBadge t={t} /><span className="label">YOUR KEYWORDS · PRIVATE</span></div>
+          <NoteKeys v={v} t={t} words={v.secret?.keywords} />
+        </>}
+        {me.role !== 'interceptor' && <>
+          <div className="flex items-center gap-2 pt-2"><ChBadge t={o} /><span className="label">CHANNEL {CH[o]} · INTERCEPTED CLUES</span></div>
+          <NoteKeys v={v} t={o} words={v.reveal?.[o]} />
+        </>}
         <div className="panel p-3 mt-2"><div className="label mb-2">TRANSMISSION LOG</div><Log v={v} /></div>
       </section>
     </Shell>
@@ -285,13 +290,14 @@ function CodeEntry({ v, run }: { v: View; run: Run }) {
         <>
           <div className="label">{intercept ? `TAP THE KEY EACH CLUE POINTS TO. THEIR PAST CLUES ARE UNDER EACH KEY.` : 'TAP THE KEYWORD EACH CLUE POINTS TO, IN ORDER. KEYS 1–4 WORK TOO.'}</div>
           <NoteKeys v={v} t={sheet} words={intercept ? null : v.secret?.keywords} onKey={press} picked={digits} />
-          <div className="grid grid-cols-[1fr_2fr] gap-3">
+          <p className="label">ONE LOCK PER CHANNEL. AGREE OUT LOUD BEFORE YOU PRESS.</p>
+          {/* pinned to the bottom edge on phones so the lock stays under the thumb while scrolling the sheets */}
+          <div className="grid grid-cols-[1fr_2fr] gap-3 sticky bottom-0 z-10 -mx-4 sm:mx-0 px-4 sm:px-0 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] bg-ivory/95 border-t border-[#D2D1CB] sm:border-0 sm:static">
             <Key dark className="min-h-13 py-3.5 font-bold tracking-[.14em] text-[12px]" onClick={back} disabled={!digits.length}>BACK</Key>
             <Key on className="min-h-13 py-3.5 font-bold tracking-[.16em] text-sm" onClick={submit} disabled={digits.length !== 3 || busy}>
               {busy ? 'PROCESSING' : intercept ? 'LOCK INTERCEPT' : 'LOCK CODE'}
             </Key>
           </div>
-          <p className="label">ONE LOCK PER CHANNEL. AGREE OUT LOUD BEFORE YOU PRESS.</p>
         </>
       )}
     </div>

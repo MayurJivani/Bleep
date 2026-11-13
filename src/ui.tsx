@@ -7,21 +7,22 @@ export const spring = { type: 'spring', stiffness: 700, damping: 32, mass: 0.6 }
 export const CH = ['A', 'B'] as const;
 export const chColor = (t: Team) => (t === 0 ? 'blue' : 'yellow');
 
-/** BLEEP wordmark: geometric strokes; the middle bars of both Es are cut out and replaced by signal lamps. */
+// 5x7 dot-matrix glyphs: # lit, o lit as a signal lamp (the middle bars of both Es), . unlit.
+const GLYPHS = {
+  B: '####. #...# #...# ####. #...# #...# ####.',
+  L: '#.... #.... #.... #.... #.... #.... #####',
+  E: '##### #.... #.... #ooo. #.... #.... #####',
+  P: '####. #...# #...# ####. #.... #.... #....',
+};
+
+/** BLEEP wordmark set in the same dot matrix as the device screens; unlit dots stay faintly visible. */
 export function Wordmark({ className = '', lamp = true }: { className?: string; lamp?: boolean }) {
-  const s = { stroke: 'currentColor', strokeWidth: 18, fill: 'none' } as const;
-  const E = (x: number) => (
-    <g transform={`translate(${x} 0)`}>
-      <path {...s} d="M9 0V100M0 9H56M0 91H56" />
-      <rect x="27" y="41" width="18" height="18" fill={lamp ? 'var(--color-orange)' : 'currentColor'} />
-    </g>
-  );
   return (
-    <svg viewBox="0 0 380 100" className={className} role="img" aria-label="BLEEP">
-      <path {...s} d="M9 0V100M9 9H36a20.5 20.5 0 0 1 0 41H9M9 50H40a20.5 20.5 0 0 1 0 41H9" />
-      <path {...s} d="M99 0V100M90 91H146" />
-      {E(160)}{E(230)}
-      <path {...s} d="M309 0V100M309 9H336a25 25 0 0 1 0 50H309" />
+    <svg viewBox="0 0 290 70" className={className} role="img" aria-label="BLEEP">
+      {[...'BLEEP'].map((ch, li) => GLYPHS[ch as keyof typeof GLYPHS].split(' ').map((row, y) => [...row].map((c, x) => (
+        <circle key={`${li}${y}${x}`} cx={li * 60 + x * 10 + 5} cy={y * 10 + 5} r={4.3}
+          fill={c === 'o' && lamp ? 'var(--color-orange)' : 'currentColor'} opacity={c === '.' ? 0.09 : 1} />
+      ))))}
     </svg>
   );
 }

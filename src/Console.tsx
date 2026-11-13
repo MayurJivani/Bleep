@@ -96,7 +96,7 @@ export function NoteKeys({ v, t, words, highlight, onKey, picked }: {
         const Cap = onKey ? motion.button : motion.div;
         return (
           <div key={d} className="flex flex-col gap-2 min-w-0">
-            <Cap type={onKey ? 'button' : undefined} onClick={onKey && (() => onKey(d))} disabled={onKey ? on : undefined}
+            <Cap type={onKey ? 'button' : undefined} onClick={onKey && (() => onKey(d))} aria-pressed={onKey ? !!on : undefined}
               whileTap={onKey ? { y: 2 } : undefined} className="key px-2 py-2.5 text-left min-h-14 flex flex-col justify-between" data-on={!!on}>
               <span className="mono text-[11px] font-bold opacity-70">{pad(d)}</span>
               <span className={`text-[12px] font-semibold leading-tight [overflow-wrap:anywhere] ${words ? '' : 'opacity-40 whitespace-nowrap overflow-hidden'}`}>{words ? words[i] : '▮▮▮▮'}</span>
@@ -154,9 +154,9 @@ export function Log({ v, max }: { v: View; max?: number }) {
       <AnimatePresence initial={false}>
         {rows.map(h => (
           <motion.li key={`${h.round}${h.team}`} initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-dashed border-[#BDBCB6] pb-1.5 last:border-0">
+            className="grid grid-cols-[1fr_auto] sm:grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-0.5 border-b border-dashed border-[#BDBCB6] pb-1.5 last:border-0">
             <span className="label whitespace-nowrap">RND {pad(h.round)} / CH {CH[h.team]}</span>
-            <span className="mono text-[12px] font-semibold truncate">{h.clues.join(' → ')}</span>
+            <span className="mono text-[12px] font-semibold sm:truncate col-span-2 sm:col-span-1 order-last sm:order-none [overflow-wrap:anywhere]">{h.clues.join(' → ')}</span>
             <span className="flex items-center gap-2 mono text-[11px] tnum">
               {h.code.join('-')}
               <span title={h.decodeOk ? 'Decoded' : 'Miscommunication'} className={h.decodeOk ? '' : 'text-[#9A6A00] font-bold'}>{h.decodeOk ? 'OK' : 'MISS'}</span>
@@ -237,7 +237,7 @@ export function LiveClues({ v }: { v: View }) {
       )}
       <ol className="flex flex-col gap-2">
         {v.live!.map((c, i) => (
-          <motion.li key={i} className="flex items-baseline gap-4" initial={{ opacity: 0, filter: 'blur(4px)' }} animate={{ opacity: 1, filter: 'blur(0px)' }} transition={{ delay: 0.15 + i * 0.22, duration: 0.25 }}>
+          <motion.li key={i} className="flex items-baseline gap-4" initial={{ opacity: 0.3, filter: 'blur(3px)' }} animate={{ opacity: 1, filter: 'blur(0px)' }} transition={{ delay: 0.15 + i * 0.22, duration: 0.25 }}>
             <span className="screen-text text-[11px] text-[#8A8C8E] w-14">CH {pad(i + 1)}</span>
             <span className="screen-text text-[clamp(1.1rem,6cqi,2.75rem)] leading-none [overflow-wrap:anywhere]">{c}</span>
           </motion.li>

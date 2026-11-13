@@ -30,7 +30,8 @@ try {
   for (let i = 0; i < 4; i++) { const p = await phone(); p.on('pageerror', e => errors.push(String(e))); pages.push(p); }
   const [host] = pages;
   await host.goto(BASE);
-  await shot(host, '02-landing-mobile');
+  await host.waitForTimeout(1000);
+  await shot(host, '02-landing-mobile', true);
   await host.getByRole('button', { name: 'CREATE ROOM' }).click();
   await host.getByPlaceholder('YOUR NAME').fill(names[0]);
   await host.getByRole('button', { name: 'OPEN A CHANNEL' }).click();
@@ -83,7 +84,8 @@ try {
       const enc = await findRole('REVIEW TRANSMISSION', t);
       const label = await enc.locator('[aria-label^="Your code"]').getAttribute('aria-label');
       codes[t] = label!.replace('Your code ', '').split(' ').map(Number);
-      for (const other of pages) if (other !== enc) assert(!(await other.content()).includes(label!), 'code leaked to another seat');
+      // the other channel's encryptor shows its own code, which can equal this one by chance
+      for (const other of pages) if (other !== enc && !(await other.getByRole('button', { name: 'REVIEW TRANSMISSION' }).count())) assert(!(await other.content()).includes(label!), 'code leaked to another seat');
       assert(!(await screen.content()).includes(label!), 'code leaked to console');
       const inputs = enc.locator('input.field');
       for (let i = 0; i < 3; i++) await inputs.nth(i).fill(`r${r}c${t}x${i}`.replace(/\d/g, d => 'ZYXWVUTSRQ'[+d]));

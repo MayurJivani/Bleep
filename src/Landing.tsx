@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 import type { View } from '../shared/engine';
 import { call, go, saveToken } from './net';
-import { ConsoleDevice } from './Console';
+import { ConsoleDevice, MainDisplay } from './Console';
 import { Key, Led, Signature, SoundToggle, Wordmark } from './ui';
 
 const demo: View = {
@@ -44,7 +44,7 @@ export function Landing() {
         <SoundToggle />
       </header>
 
-      <section className="max-w-[1400px] mx-auto px-5 sm:px-10 pt-10 sm:pt-16 pb-12 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-10 lg:gap-14 items-center">
+      <section className="max-w-[1400px] mx-auto px-5 sm:px-10 pt-10 sm:pt-16 pb-12 grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-10 lg:gap-14 items-center">
         <div className="flex flex-col gap-7">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
             <h1><Wordmark className="w-full max-w-[520px] text-char" /></h1>
@@ -79,7 +79,9 @@ export function Landing() {
         </div>
         <motion.div aria-label="The BLEEP console mid-game" initial={{ opacity: 0, y: 24, rotate: -0.6 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="pointer-events-none select-none lg:-mr-24 xl:-mr-40" inert>
-          <ConsoleDevice v={demo} />
+          <div className="hidden lg:block"><ConsoleDevice v={demo} /></div>
+          {/* the full console stacks too tall on a phone; show its display only */}
+          <div className="lg:hidden body p-3"><MainDisplay v={demo} /></div>
         </motion.div>
       </section>
 
