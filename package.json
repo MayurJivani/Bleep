@@ -9,7 +9,7 @@
     "build": "vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "test": "vitest run",
-    "e2e": "tsx e2e/play.ts",
+    "e2e": "vite build && tsx e2e/play.ts",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
