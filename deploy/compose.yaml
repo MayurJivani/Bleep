@@ -1,0 +1,21 @@
+# Coolify on Jinx (FRC/DEPLOY.md). Host network: the app listens on 4410 behind Caddy.
+services:
+  bleep:
+    image: ghcr.io/mayurjivani/bleep:latest
+    pull_policy: always
+    network_mode: host
+    restart: unless-stopped
+    user: "1000:1000"
+    command: ["node_modules/.bin/tsx", "server/index.ts"]
+    environment:
+      NODE_ENV: "production"
+      PORT: "4410"
+      BLEEP_DATA: "/data"
+    volumes:
+      - /var/lib/private/bleep:/data
+    mem_limit: 256m
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]

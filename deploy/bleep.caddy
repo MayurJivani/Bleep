@@ -1,0 +1,7 @@
+http://bleep.futile.studio {
+	import common
+	# The console and every phone share one socket; buffered, a reveal reaches screens at different times.
+	reverse_proxy 127.0.0.1:4410 {
+		flush_interval -1
+	}
+}
