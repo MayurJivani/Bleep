@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #E9E8E3;
+  --color-grey: #D5D5D0;
+  --color-char: #252729;
+  --color-ink2: #56585A;
+  --color-disp: #17191B;
+  --color-orange: #FF572E;
+  --color-blue: #7799A6;
+  --color-yellow: #E8B94E;
+  --font-sans: "Outfit Variable", ui-sans-serif, sans-serif;
+  --font-mono: "Martian Mono Variable", ui-monospace, monospace;
+  --font-dot: "Doto", "Martian Mono Variable", monospace;
+}
+
+:root { color-scheme: light; background: #CFCEC8; color: var(--color-char); font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; }
+body { margin: 0; min-height: 100dvh; }
+::selection { background: var(--color-orange); color: var(--color-ivory); }
+input { caret-color: var(--color-orange); }
+:focus-visible { outline: 2px solid var(--color-orange); outline-offset: 3px; border-radius: 6px; }
+* { scrollbar-width: thin; scrollbar-color: #A9A9A3 transparent; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Silkscreen label: the small printed text on a panel. */
+.label { font-family: var(--font-sans); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--color-ink2); }
+.mono { font-family: var(--font-mono); letter-spacing: .02em; }
+
+/* Moulded body: warm plastic with one directional light from top-left. */
+.body {
+  background: var(--color-ivory);
+  border-radius: 28px;
+  box-shadow: inset 0 1px 0 #F7F6F2, inset 0 -2px 0 #C9C8C2, 0 2px 3px rgb(37 39 41 / .12), 0 24px 48px -18px rgb(37 39 41 / .35);
+}
+.panel { background: var(--color-grey); border-radius: 14px; box-shadow: inset 0 1px 2px rgb(37 39 41 / .18), inset 0 -1px 0 #E4E3DE; }
+.seam { border: 1px solid #C4C3BD; }
+
+/* Display glass: recessed into the body. */
+.screen {
+  background: var(--color-disp); color: var(--color-ivory); border-radius: 12px;
+  box-shadow: inset 0 2px 6px rgb(0 0 0 / .7), 0 1px 0 #FBFAF6, 0 -1px 0 #BEBDB7;
+}
+.screen-text { font-family: var(--font-dot); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+
+/* Perforated speaker. */
+.grille { background-image: radial-gradient(circle at 50% 40%, #9C9B95 0 1.6px, transparent 2.1px); background-size: 9px 9px; }
+
+/* Raised key cap. Pressed state handled by Motion; this is the idle geometry. */
+.key {
+  position: relative; background: linear-gradient(#F4F3EF, #E3E2DC); color: var(--color-char);
+  border-radius: 10px; border: 1px solid #BDBCB6;
+  box-shadow: 0 3px 0 #B3B2AC, 0 5px 10px -3px rgb(37 39 41 / .35);
+  transition: background-color .15s, color .15s;
+  touch-action: manipulation; user-select: none;
+}
+.key[data-on="true"] { background: var(--color-orange); color: #fff; border-color: #D9411C; box-shadow: 0 3px 0 #C23A18, 0 5px 12px -3px rgb(194 58 24 / .55); }
+.key[data-dark="true"] { background: linear-gradient(#3A3C3F, #2A2C2E); color: var(--color-ivory); border-color: #17191B; box-shadow: 0 3px 0 #111213, 0 5px 10px -3px rgb(0 0 0 / .5); }
+.key:disabled { cursor: not-allowed; opacity: .45; }
+.key-pressed { box-shadow: 0 1px 0 #B3B2AC, 0 1px 3px -1px rgb(37 39 41 / .35) !important; }
+
+.field {
+  width: 100%; background: var(--color-disp); color: var(--color-ivory); border-radius: 10px; border: 0;
+  font-family: var(--font-mono); font-size: 16px; text-transform: uppercase; letter-spacing: .06em;
+  padding: 14px 14px; box-shadow: inset 0 2px 5px rgb(0 0 0 / .65);
+}
+.field::placeholder { color: #8A8C8E; }
+.field:focus { outline: 2px solid var(--color-orange); outline-offset: 2px; }
+
+.led { width: 9px; height: 9px; border-radius: 50%; background: #9A9994; box-shadow: inset 0 1px 1px rgb(0 0 0 / .35); }
+.led[data-c="orange"] { background: var(--color-orange); box-shadow: 0 0 0 2px rgb(255 87 46 / .18); }
+.led[data-c="yellow"] { background: var(--color-yellow); box-shadow: 0 0 0 2px rgb(232 185 78 / .2); }
+.led[data-c="blue"] { background: var(--color-blue); box-shadow: 0 0 0 2px rgb(119 153 166 / .22); }
+.led[data-c="green"] { background: #8FBF7A; }
+
+/* Token slot: a small window that lights when filled. */
+.slot { width: 22px; height: 12px; border-radius: 3px; background: #2B2D2F; box-shadow: inset 0 1px 2px rgb(0 0 0 / .8); }
+.slot[data-c="orange"] { background: var(--color-orange); }
+.slot[data-c="yellow"] { background: var(--color-yellow); }
+
+.screw { width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #F2F1EC, #B8B7B1); box-shadow: inset 0 0 0 1px #A8A7A1; position: relative; }
+.screw::after { content: ""; position: absolute; left: 2px; right: 2px; top: 4.5px; height: 1px; background: #8E8D87; transform: rotate(35deg); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
