@@ -2,3 +2,4 @@ node_modules
 dist
 data
 e2e/shots
+core.*

@@ -234,7 +234,7 @@ export function submitTiebreak(room: Room, id: string, raw: unknown) {
   const t = player(room, id).team ?? fail('Spectators cannot guess.');
   if (g.tiebreak[t]) fail('Your channel already submitted.');
   if (!Array.isArray(raw) || raw.length !== 4) fail('Guess all four keywords.');
-  g.tiebreak[t] = raw.map(cleanClue);
+  g.tiebreak[t] = (raw as unknown[]).map(cleanClue);
   if (g.tiebreak[0] && g.tiebreak[1]) {
     const hits = ([0, 1] as Team[]).map(x => g.tiebreak[x]!.filter((w, i) => w === g.keywords[1 - x][i]).length) as [number, number];
     g.phase = 'over';
