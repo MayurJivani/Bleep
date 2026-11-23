@@ -20,6 +20,20 @@ const demo: View = {
   result: null, tiebreakIn: [false, false], secret: null, reveal: null,
 };
 
+export const HowTo = ({ className = '' }: { className?: string }) => (
+  <ol className={`flex flex-col leading-relaxed ${className}`}>
+    {[
+      ['Set up', '4 to 12 players on their own phones, split into two channels of at least two. Put the shared console on a TV or laptop that everyone can see.'],
+      ['Encrypt', 'Both encryptors write three clues at once. When one channel seals, the other has 30 seconds of sand left.'],
+      ['Decode', 'Channel A\'s clues go public. A\'s teammates lock in a code. From round 2, channel B locks an interception attempt at the same time.'],
+      ['Reveal', 'A wrong decode earns a miscommunication token. A correct interception earns an interception token. Then channel B transmits.'],
+      ['Win', 'Checked at the end of each round: two interceptions win, two miscommunications lose. Ties and round 8 go to score, then to guessing each other\'s keywords.'],
+    ].map(([k, t]) => (
+      <li key={k} className="grid grid-cols-[88px_1fr] gap-4"><span className="label !text-orange pt-1">{k}</span><span>{t}</span></li>
+    ))}
+  </ol>
+);
+
 export function Landing() {
   const [mode, setMode] = useState<'create' | 'join' | null>(null);
   const [name, setName] = useState(localStorage.getItem('bleep:name') ?? '');
@@ -103,17 +117,7 @@ export function Landing() {
               <div className="screen-text text-[11px] text-[#8A8C8E]">FOREST · MOON · DIAMOND</div>
             </div>
           </div>
-          <ol className="flex flex-col gap-6 text-[16px] leading-relaxed text-[#C9C8C2]">
-            {[
-              ['Set up', '4 to 12 players on their own phones, split into two channels of at least two. Put the shared console on a TV or laptop that everyone can see.'],
-              ['Encrypt', 'Both encryptors write three clues at once. When one channel seals, the other has 30 seconds of sand left.'],
-              ['Decode', 'Channel A\'s clues go public. A\'s teammates lock in a code. From round 2, channel B locks an interception attempt at the same time.'],
-              ['Reveal', 'A wrong decode earns a miscommunication token. A correct interception earns an interception token. Then channel B transmits.'],
-              ['Win', 'Checked at the end of each round: two interceptions win, two miscommunications lose. Ties and round 8 go to score, then to guessing each other\'s keywords.'],
-            ].map(([k, t]) => (
-              <li key={k} className="grid grid-cols-[88px_1fr] gap-4"><span className="label !text-orange pt-1">{k}</span><span>{t}</span></li>
-            ))}
-          </ol>
+          <HowTo className="gap-6 text-[16px] text-[#C9C8C2]" />
         </div>
       </section>
 

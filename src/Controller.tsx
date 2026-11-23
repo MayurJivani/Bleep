@@ -4,6 +4,7 @@ import type { Team, View } from '../shared/engine';
 import { MIN_TEAM } from '../shared/engine';
 import { act, go, useRoom } from './net';
 import { CH, ChBadge, Key, Led, Seg, SegRow, SoundToggle, Ticker, Wordmark, chColor, Signature } from './ui';
+import { HowTo } from './Landing';
 import { Boot, LiveClues, Log, NoteKeys, Notice, Tokens, TopStrip, pad, statusLine, useEventSounds, useSandSeconds } from './Console';
 
 export function Seat({ room }: { room: string }) {
@@ -47,7 +48,11 @@ const Shell = ({ v, online, children, wide }: { v: View; online: boolean; childr
       <TopStrip v={v} online={online} compact />
     </div>
     {children}
-    <div className="flex items-center justify-between pt-2 mt-auto"><Signature /><SoundToggle /></div>
+    <details className="panel p-3 mt-auto">
+      <summary className="label cursor-pointer min-h-11 flex items-center">HOW TO PLAY</summary>
+      <HowTo className="gap-4 pt-3 text-[14px]" />
+    </details>
+    <div className="flex items-center justify-between pt-2"><Signature /><SoundToggle /></div>
   </div>
 );
 
